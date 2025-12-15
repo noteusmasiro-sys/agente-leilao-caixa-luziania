@@ -1,0 +1,27 @@
+name: Agente Leilão Caixa Luziânia
+
+on:
+  schedule:
+    - cron: "0 */6 * * *"   # roda a cada 6 horas
+  workflow_dispatch:        # permite rodar manualmente
+
+jobs:
+  run:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Baixar código
+        uses: actions/checkout@v4
+
+      - name: Configurar Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - name: Instalar dependências
+        run: pip install requests beautifulsoup4
+
+      - name: Executar agente
+        run: python main.py
+        env:
+          TELEGRAM_TOKEN: ${{ secrets.TELEGRAM_TOKEN }}
+          CHAT_ID: ${{ secrets.CHAT_ID }}
